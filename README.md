@@ -111,3 +111,39 @@ class Solution {
 - check if the i th sum is equal to total-i th sum + i
 - If equal then return i
 - else return -1.
+### 29. Divide Two Integers
+[Leetcode link](https://leetcode.com/problems/divide-two-integers/description/?envType=problem-list-v2&envId=math&status=TO_DO&difficulty=MEDIUM)
+<br>
+Given two integers dividend and divisor, divide two integers without using multiplication, division, and mod operator.
+The integer division should truncate toward zero, which means losing its fractional part. For example, 8.345 would be truncated to 8, and -2.7335 would be truncated to -2.
+Return the quotient after dividing dividend by divisor.
+Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−231, 231 − 1]. For this problem, if the quotient is strictly greater than 231 - 1, then return 231 - 1, and if the quotient is strictly less than -231, then return -231.
+
+Example 1:
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = 3.33333.. which is truncated to 3.
+
+Example 2:
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = -2.33333.. which is truncated to -2.
+ 
+Constraints:
+-231 <= dividend, divisor <= 231 - 1
+divisor != 0
+
+```java
+class Solution 
+{
+    public int divide(int dividend, int divisor) 
+    {
+        long t =  ((long)dividend/(long)divisor);
+        if(-t==Integer.MIN_VALUE) return Integer.MAX_VALUE;
+        else return (int)t;
+    }
+}
+```
+- In this program only edge case is to whenver we divide the -2,147,483,648(Integer.MIN_VALUE) by -1 then it will give 2,147,483,648 but in the positive side it did not have the value we already know the integer range 	-2,147,483,648 to 2,147,483,647.
+- So we check that edge case only in that time we manually return the Integer.MAX_VALUE.
+- Otherwise we simply return the dividend/divisor(int). 
