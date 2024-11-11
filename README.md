@@ -146,4 +146,87 @@ class Solution
 ```
 - In this program only edge case is to whenver we divide the -2,147,483,648(Integer.MIN_VALUE) by -1 then it will give 2,147,483,648 but in the positive side it did not have the value we already know the integer range 	-2,147,483,648 to 2,147,483,647.
 - So we check that edge case only in that time we manually return the Integer.MAX_VALUE.
-- Otherwise we simply return the dividend/divisor(int). 
+- Otherwise we simply return the dividend/divisor(int).
+### 2601. Prime Subtraction Operation
+[Leetcode link](https://leetcode.com/problems/prime-subtraction-operation/?envType=daily-question&envId=2024-11-11)
+<br>
+You are given a 0-indexed integer array nums of length n.
+You can perform the following operation as many times as you want:
+Pick an index i that you haven’t picked before, and pick a prime p strictly less than nums[i], then subtract p from nums[i].
+Return true if you can make nums a strictly increasing array using the above operation and false otherwise.
+A strictly increasing array is an array whose each element is strictly greater than its preceding element.
+
+Exmple 1:
+
+Input: nums = [4,9,6,10]
+Output: true
+Explanation: In the first operation: Pick i = 0 and p = 3, and then subtract 3 from nums[0], so that nums becomes [1,9,6,10].
+In the second operation: i = 1, p = 7, subtract 7 from nums[1], so nums becomes equal to [1,2,6,10].
+After the second operation, nums is sorted in strictly increasing order, so the answer is true.
+
+Example 2:
+Input: nums = [6,8,11,12]
+Output: true
+Explanation: Initially nums is sorted in strictly increasing order, so we don't need to make any operations.
+
+Example 3:
+Input: nums = [5,8,3]
+Output: false
+Explanation: It can be proven that there is no way to perform operations to make nums sorted in strictly increasing order, so the answer is false.
+
+Constraints:
+1 <= nums.length <= 1000
+1 <= nums[i] <= 1000
+nums.length == n
+```java
+class Solution {
+    public boolean primeSubOperation(int[] nums) {
+        int[] copy = nums.clone();
+        Arrays.sort(copy);
+        int max = copy[copy.length-1];
+        boolean[] prime = new boolean[max+1];
+        Arrays.fill(prime,true);
+        for(int i=2;i<Math.sqrt(prime.length);i++)
+        {
+            int index = 2;
+            while(index*i<prime.length) 
+            {
+                prime[index*i] = false;
+                index++;
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        for(int i=2;i<prime.length;i++) 
+        {
+            if(prime[i]) ans.add(i);
+        }
+        Collections.reverse(ans);
+        int prev = 0;
+        for(int i=0;i<nums.length;i++)
+        {
+            int j=0;
+            while((j<ans.size()) && ((nums[i]-ans.get(j))<0 || (nums[i]-ans.get(j))<=prev))
+            {
+                j++;
+            }
+            if(j<ans.size()) nums[i] = nums[i]-ans.get(j);
+            prev = nums[i];
+        }
+        for(int i=0;i<nums.length-1;i++)
+        {
+            if(nums[i]>=nums[i+1]) return false;
+        }
+        return true;
+    }
+}
+```
+- In this code we initially getting the all prime numbers below the max element.
+- To find the max element first we clone the array and sort the array and get the final element so that is the large element in the array.
+- So declare a size of the array with max+1 and initialize to true.
+- Then from the 2 the multiple of 2 is not the prime number so change to false same for the 3 the multiple of the three did not the prime number so change to true.
+- This will ontinue till the half of the array.
+- then true elements index are prime number so added to the list.
+- for each element in the nums we must reduce to the small element then only we get the increasing sequence.
+- so we move the j untill the subraction value greater than the prev value and greater than 0.
+- so finally we check every ith element will less than the i+1 th element.
+> [Reference](https://www.youtube.com/watch?v=Kq-UzuTd7Dg)
